@@ -47,22 +47,24 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: [{ squares: Array(9).fill(null) }],
-      xIsNext: true,
-      stepNumber: 0
+      history: [
+        {
+          squares: Array(9).fill(null)
+        }
+      ],
+      stepNumber: 0,
+      xIsNext: true
     };
   }
 
   handleClick(i) {
-    const history = this.state.history.slice(this.state.stepNumber + 1);
-    // const current = history[history.length - 1];
-    const squares = history[history.length - 1].squares.slice();
-
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const current = history[history.length - 1];
+    const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? "X" : "O";
-
     this.setState({
       history: history.concat([
         {
@@ -109,12 +111,16 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{moves}</ol>
         </div>
       </div>
     );
   }
 }
+
+// ========================================
+
+ReactDOM.render(<Game />, document.getElementById("root"));
 
 function calculateWinner(squares) {
   const lines = [
@@ -135,6 +141,3 @@ function calculateWinner(squares) {
   }
   return null;
 }
-// ========================================
-
-ReactDOM.render(<Game />, document.getElementById("root"));
